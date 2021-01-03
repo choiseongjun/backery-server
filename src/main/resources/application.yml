@@ -1,5 +1,10 @@
 spring:
   datasource:
-    url: "jdbc:mysql://clouddb.cxz28d3n4hpj.ap-northeast-2.rds.amazonaws.com:3306/bakeryproject"
-    username : 
+    url: "jdbc:mysql://ls-5e1f6dc6cda34ee3ff0a83dddc17e6772c6fe068.cpd3bfmvavpa.ap-northeast-2.rds.amazonaws.com:3306/bakeryproject"
+    username : dbmasteruser
     password:  
+    
+mybatis:
+  mapper-locations: mapper/*.xml
+  
+ 
