@@ -20,6 +20,11 @@
 		    ,id as id
 		    ,image as image
 		 from breadstore
+		 	<trim prefix="WHERE" prefixOverrides="AND|OR">
+				<if test="keyword != null and keyword != '' ">
+					AND entrp_nm like CONCAT('%', #{keyword}, '%')
+				</if>
+			</trim>
 		 LIMIT #{startList}, #{listSize}
 	</select>
 	<select id="selectOneBackery" resultType="com.bakery.pj.model.BackeryVo">

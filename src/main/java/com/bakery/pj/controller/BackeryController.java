@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bakery.pj.common.Pagination;
+import com.bakery.pj.common.Search;
 import com.bakery.pj.model.BackeryVo;
 import com.bakery.pj.model.ImageFile;
 import com.bakery.pj.service.BackeryService;
@@ -33,21 +34,27 @@ public class BackeryController {
 	@GetMapping("/bakery") 
 	public ResponseEntity<?> listbackery(@RequestParam(required = false, defaultValue = "1") int page
 										,@RequestParam(required = false, defaultValue = "1") int range
-				){
-		int listCnt = backeryService.getBakeryListCnt();
+										, @RequestParam(required = false) String keyword){
+	
+			Search search = new Search();
 
-		Pagination pagination = new Pagination();
-		pagination.pageInfo(page, range, listCnt);
+			search.setKeyword(keyword);
 
 
-
-		List<BackeryVo> backeryList = backeryService.listbackery(pagination);
-		try {
-			
-			return new ResponseEntity<>(backeryList,HttpStatus.OK);
-		}catch(Exception e) {  
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
+			int listCnt = backeryService.getBakeryListCnt();
+	
+			Pagination pagination = new Pagination();
+			pagination.pageInfo(page, range, listCnt);
+	
+	
+	
+			List<BackeryVo> backeryList = backeryService.listbackery(search);
+			try {
+				
+				return new ResponseEntity<>(backeryList,HttpStatus.OK);
+			}catch(Exception e) {  
+				return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+			}
 	}
 	/*
 	 * 빵집디테일
