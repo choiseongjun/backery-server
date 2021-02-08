@@ -7,4 +7,6 @@ spring:
 mybatis:
   mapper-locations: mapper/*.xml
   
- 
+jwt:
+  signingKey: 123456789
+  subject: johnblog/subject

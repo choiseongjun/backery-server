@@ -19,4 +19,8 @@ public class BackeryService {
 		return sqlSession.selectList("com.bakery.pj.mapper.BackeryMapper.selectBackery");
 	}
 
+	public BackeryVo detailBakery(long id) {
+		return sqlSession.selectOne("com.bakery.pj.mapper.BackeryMapper.selectOneBackery",id);
+	}
+
 }
