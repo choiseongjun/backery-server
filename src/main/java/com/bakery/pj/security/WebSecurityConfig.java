@@ -13,12 +13,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.bakery.pj.security.jwt.TokenAuthenticationFilter;
+import com.bakery.pj.security.jwt.CustomJwtAuthenticationFilter;
+import com.bakery.pj.security.jwt.CustomUserDetailsService;
+import com.bakery.pj.security.jwt.JwtAuthenticationEntryPoint;
 
 
 @Configuration
@@ -28,8 +32,20 @@ import com.bakery.pj.security.jwt.TokenAuthenticationFilter;
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
-	@Autowired private TokenAuthenticationFilter tokenAuthenticationFilter;
-
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
+	
+	@Autowired
+	private CustomJwtAuthenticationFilter customJwtAuthenticationFilter;
+	
+	@Autowired
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
+	
 	@Override
 	public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) throws Exception {
 		web
@@ -39,14 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-			.inMemoryAuthentication()
-			.withUser("system")
-			.password("{noop}system")
-			.roles("ADMIN", "USER");
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -72,9 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-
-			.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+			.and().addFilterBefore(customJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Bean
