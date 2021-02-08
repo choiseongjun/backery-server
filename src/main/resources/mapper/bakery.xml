@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bakery.pj.mapper.BakeryMapper">
+	
+	<select id="selectBackery" resultType="com.bakery.pj.model.BackeryVo"> 
+		select 
+			 entrp_nm as entrpNm
+		    ,load_addr as loadAddr
+		    ,city_do_cd as cityDoCd
+		    ,city_gn_gu_cd as cityGuguCd
+		    ,xpos_lo as xposIo
+		    ,ypos_la as yposIa
+		    ,area_nm as areaNm
+		    ,homepage_url as homepageUrl
+		    ,tel_no as telNo
+		    ,reprsnt_menu_nm as reprsntMenuNm
+		    ,menu_pc as menuPc
+		    ,base_ymd as baseYmd
+		    ,id as id
+		    ,image as image
+		 from breadstore
+		 LIMIT #{startList}, #{listSize}
+	</select>
+	<select id="selectOneBackery" resultType="com.bakery.pj.model.BackeryVo">
+		select 
+			 entrp_nm as entrpNm  
+		    ,load_addr as loadAddr
+		    ,city_do_cd as cityDoCd
+		    ,city_gn_gu_cd as cityGuguCd
+		    ,xpos_lo as xposIo
+		    ,ypos_la as yposIa
+		    ,area_nm as areaNm
+		    ,homepage_url as homepageUrl
+		    ,tel_no as telNo
+		    ,reprsnt_menu_nm as reprsntMenuNm
+		    ,menu_pc as menuPc
+		    ,base_ymd as baseYmd
+		    ,id as id
+		    ,image as image
+		 from breadstore
+		 where id=#{id}
+	</select>
+	<select id="selectBakeryListCnt" resultType="int">
+		select
+			count(*) as listCnt
+		from
+			breadstore
+
+	</select>
+
+</mapper>

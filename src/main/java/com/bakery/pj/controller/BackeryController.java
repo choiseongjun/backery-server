@@ -12,12 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bakery.pj.common.Pagination;
 import com.bakery.pj.model.BackeryVo;
 import com.bakery.pj.model.ImageFile;
 import com.bakery.pj.service.BackeryService;
@@ -32,10 +31,19 @@ public class BackeryController {
 	 * 빵집리스트
 	 * */
 	@GetMapping("/bakery") 
-	public ResponseEntity<?> listbackery(){
-		
+	public ResponseEntity<?> listbackery(@RequestParam(required = false, defaultValue = "1") int page
+										,@RequestParam(required = false, defaultValue = "1") int range
+				){
+		int listCnt = backeryService.getBakeryListCnt();
+
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+
+
+
+		List<BackeryVo> backeryList = backeryService.listbackery(pagination);
 		try {
-			List<BackeryVo> backeryList = backeryService.listbackery();
+			
 			return new ResponseEntity<>(backeryList,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -46,8 +54,9 @@ public class BackeryController {
 	 * */
 	@GetMapping("/bakery/{id}") 
 	public ResponseEntity<?> detailBackery(@PathVariable long id){
+		BackeryVo bakeryDetail = backeryService.detailBakery(id);
 		try {
-			BackeryVo bakeryDetail = backeryService.detailBakery(id);
+
 			return new ResponseEntity<>(bakeryDetail,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
