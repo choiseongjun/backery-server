@@ -16,4 +16,9 @@ public class UserService {
 		sqlSession.insert("com.bakery.pj.mapper.UserMapper.saveUser", newUser);
 		return newUser;
 	}
+
+	public UserDao selectUserEmail(String username) {
+		System.out.println(username);
+		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.selectUser",username);
+	}
 }

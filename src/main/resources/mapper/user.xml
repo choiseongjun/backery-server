@@ -10,5 +10,15 @@
 		INSERT INTO user (id,password,role,nickname,email)
 		VALUES (#{id},#{password},#{role},#{nickname},#{email});
 	</insert>
+	<select id="selectUser" parameterType="string" resultType="com.bakery.pj.model.user.UserDao">
+		select 
+			id as id
+		    ,role as role
+		    ,password as password
+		    ,nickname as nickname
+		    ,email as email
+		from user
+		where email=#{email}
+	</select>
 
 </mapper>

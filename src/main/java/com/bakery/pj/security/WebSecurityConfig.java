@@ -65,6 +65,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.httpBasic().disable()
 			.headers().frameOptions().disable()
 			.and()
+			.authorizeRequests().antMatchers("/helloadmin").hasRole("ADMIN")
+			.antMatchers("/hellouser").hasAnyRole("USER","ADMIN")
+			.and()
 
 			.exceptionHandling()
 			.authenticationEntryPoint(authenticationEntryPoint())
