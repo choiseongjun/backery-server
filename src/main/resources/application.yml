@@ -8,5 +8,6 @@ mybatis:
   mapper-locations: mapper/*.xml
   
 jwt:
-  signingKey: 123456789
-  subject: johnblog/subject
+  signingKey: 123456789 
+  expirationDateInMs : 400000
+  refreshExpirationDateInMs: 9000000
