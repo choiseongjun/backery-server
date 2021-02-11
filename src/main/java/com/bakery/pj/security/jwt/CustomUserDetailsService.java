@@ -44,8 +44,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 		newUser.setEmail(user.getEmail());
 		newUser.setNickname(user.getNickname());
 		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-		newUser.setRole(user.getRole());
+		newUser.setRole("ROLE_USER");
+		newUser.setUserId(user.getUserId());
 		return userService.saveUser(newUser);
 	}
+
+	
 
 }
