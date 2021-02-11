@@ -8,6 +8,7 @@ import lombok.Getter;
 @Setter
 public class UserDTO {
 	private String email;
+	private String userId;
 	private String nickname;
 	private String password;
 	private String role;

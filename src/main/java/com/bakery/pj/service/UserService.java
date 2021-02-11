@@ -21,4 +21,8 @@ public class UserService {
 		System.out.println(username);
 		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.selectUser",username);
 	}
+
+	public int selectByUserId(String userId) {
+		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.countuserId",userId);
+	}
 }

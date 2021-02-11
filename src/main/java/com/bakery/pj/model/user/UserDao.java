@@ -19,6 +19,8 @@ public class UserDao{
 	
 	private long id;
 	
+	private String userId;
+	
 	private String email;
 	
 	private String nickname;
