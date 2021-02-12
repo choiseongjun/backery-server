@@ -1,6 +1,7 @@
 package com.bakery.pj.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bakery.pj.model.BackeryVo;
 import com.bakery.pj.model.ContentImageVo;
 import com.bakery.pj.model.ContentVo;
 
@@ -46,6 +48,14 @@ public class ContentsService {
 		}
 		
 		
+	}
+
+	public List<BackeryVo> contentsList() {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentList");
+	}
+
+	public List<BackeryVo> contentsDetail() {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectFreecontentList");
 	}
 
 }

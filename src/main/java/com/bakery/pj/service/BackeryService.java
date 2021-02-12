@@ -27,4 +27,8 @@ public class BackeryService {
 		return sqlSession.selectOne("com.bakery.pj.mapper.BakeryMapper.selectBakeryListCnt");
 	}
 
+	public List<BackeryVo> maplistbackery(BackeryVo bakeryVo) {
+		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectMapListBackery",bakeryVo);
+	}
+
 }

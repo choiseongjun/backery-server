@@ -3,7 +3,7 @@
 
 <mapper namespace="com.bakery.pj.mapper.BakeryMapper">
 	
-	<select id="selectBackery" resultType="com.bakery.pj.model.BackeryVo"> 
+	<select id="selectBackery" parameterType="com.bakery.pj.model.BackeryVo" resultType="com.bakery.pj.model.BackeryVo"> 
 		select 
 			 entrp_nm as entrpNm
 		    ,load_addr as loadAddr
@@ -27,7 +27,7 @@
 			</trim>
 		 LIMIT #{startList}, #{listSize}
 	</select>
-	<select id="selectOneBackery" resultType="com.bakery.pj.model.BackeryVo">
+	<select id="selectOneBackery" parameterType="long" resultType="com.bakery.pj.model.BackeryVo">
 		select 
 			 entrp_nm as entrpNm  
 		    ,load_addr as loadAddr
@@ -53,5 +53,23 @@
 			breadstore
 
 	</select>
-
+	<select id="selectMapListBackery" resultType="com.bakery.pj.model.BackeryVo">
+	select 
+	 		entrp_nm as entrpNm
+		    ,load_addr as loadAddr
+		    ,city_do_cd as cityDoCd
+		    ,city_gn_gu_cd as cityGuguCd
+		    ,xpos_lo as xposIo
+		    ,ypos_la as yposIa
+		    ,area_nm as areaNm
+		    ,homepage_url as homepageUrl
+		    ,tel_no as telNo
+		    ,reprsnt_menu_nm as reprsntMenuNm
+		    ,menu_pc as menuPc
+		    ,base_ymd as baseYmd
+		    ,id as id
+		    ,image as image
+	 from breadstore
+	where xpos_lo like CONCAT(#{xposIo}, '%')   and ypos_la like CONCAT(#{yposIa}, '%')
+	</select>
 </mapper>

@@ -21,4 +21,6 @@ public class ContentVo {
 	
 	private String category;
 	
+	private String url;
+	
 }
