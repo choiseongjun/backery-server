@@ -37,6 +37,7 @@ public class BackeryController {
 										, @RequestParam(required = false) String keyword){
 	
 			System.out.println("fdfs");
+			System.out.println(keyword);
 			System.out.println(page);
 			Search search = new Search();
 
@@ -50,6 +51,7 @@ public class BackeryController {
 	
 	
 			List<BackeryVo> backeryList = backeryService.listbackery(search);
+			System.out.println();
 			try {
 				
 				return new ResponseEntity<>(backeryList,HttpStatus.OK);
