@@ -48,8 +48,8 @@ public class ContentsController {
 	public ResponseEntity<?> contentList(){
 		
 		try {
-			List<BackeryVo> backeryList = contentsService.contentsList();		
-			return new ResponseEntity<>(backeryList,HttpStatus.OK);
+			List<ContentVo> contentList = contentsService.contentsList();		
+			return new ResponseEntity<>(contentList,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
@@ -59,10 +59,10 @@ public class ContentsController {
 	 * */
 	@GetMapping("/contentDetail") 
 	public ResponseEntity<?> contentDetail(){
-		
+		List<ContentVo> content = contentsService.contentsDetail();		
 		try {
-			List<BackeryVo> backeryList = contentsService.contentsDetail();		
-			return new ResponseEntity<>(backeryList,HttpStatus.OK);
+			
+			return new ResponseEntity<>(content,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}

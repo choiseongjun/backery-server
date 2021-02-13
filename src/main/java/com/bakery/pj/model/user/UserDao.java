@@ -38,7 +38,7 @@ public class UserDao{
 //
 //	@Override
 //	public String getUsername() {
-//		return email;
+//		return userId;
 //	}
 //
 //	@Override
@@ -64,5 +64,5 @@ public class UserDao{
 //		// TODO Auto-generated method stub
 //		return true;
 //	}
-//	
+	
 }

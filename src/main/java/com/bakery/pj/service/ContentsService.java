@@ -50,12 +50,12 @@ public class ContentsService {
 		
 	}
 
-	public List<BackeryVo> contentsList() {
+	public List<ContentVo> contentsList() {
 		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentList");
 	}
 
-	public List<BackeryVo> contentsDetail() {
-		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectFreecontentList");
+	public List<ContentVo> contentsDetail() {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentDetail");
 	}
 
 }

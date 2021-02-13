@@ -70,6 +70,7 @@ public class UserController {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 		
+		System.out.println("authenticationRequest.getUserId()"+authenticationRequest.getUserId());
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserId());
 		String token = jwtUtil.generateToken(userDetails);
 		String resfreshToken = jwtUtil.generateRefreshToken(userDetails);
