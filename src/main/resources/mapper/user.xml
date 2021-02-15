@@ -7,18 +7,25 @@
 		<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE">
             SELECT IFNULL(MAX(id),0)+1 FROM user
         </selectKey>
-		INSERT INTO user (id,password,role,nickname,email)
-		VALUES (#{id},#{password},#{role},#{nickname},#{email});
+		INSERT INTO user (id,userid,password,role,nickname,email)
+		VALUES (#{id},#{userId},#{password},#{role},#{nickname},#{email});
 	</insert>
 	<select id="selectUser" parameterType="string" resultType="com.bakery.pj.model.user.UserDao">
 		select 
 			id as id
+			,userid as userId
 		    ,role as role
 		    ,password as password
 		    ,nickname as nickname
 		    ,email as email
 		from user
-		where email=#{email}
+		where userid=#{userId}
+	</select>
+	<select id="countuserId" resultType="int" parameterType="string">
+		select
+			count(userid)
+		from user
+		where userid=#{userId}
 	</select>
 
 </mapper>

@@ -56,7 +56,7 @@ public class JwtUtil {
 		if (roles.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
 			claims.put("isUser", true);
 		}
-		
+		System.out.println("userDetails.getUsername()"+userDetails.getUsername());
 		return doGenerateToken(claims, userDetails.getUsername());
 	}
 	public String generateRefreshToken(UserDetails userDetails) {

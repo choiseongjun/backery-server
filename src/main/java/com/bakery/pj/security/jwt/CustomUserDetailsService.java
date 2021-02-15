@@ -31,21 +31,24 @@ public class CustomUserDetailsService implements UserDetailsService {
 		List<SimpleGrantedAuthority> roles = null;
 		
 			
-		UserDao user = userService.selectUserEmail(username);
+		UserDao user = userService.selectUserId(username);
 		if (user != null) {
 			roles = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
-			return new User(user.getEmail(), user.getPassword(), roles);
+			return new User(user.getUserId(), user.getPassword(), roles);
 		}
 		throw new UsernameNotFoundException("User not found with the name " + username);	
 	}
 	
 	public UserDao save(UserDTO user) {
 		UserDao newUser = new UserDao();
+		newUser.setUserId(user.getUserId());
 		newUser.setEmail(user.getEmail());
 		newUser.setNickname(user.getNickname());
 		newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-		newUser.setRole(user.getRole());
+		newUser.setRole("ROLE_USER");
 		return userService.saveUser(newUser);
 	}
+
+	
 
 }

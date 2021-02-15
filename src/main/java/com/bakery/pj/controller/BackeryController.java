@@ -12,13 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bakery.pj.common.Pagination;
 import com.bakery.pj.common.Search;
 import com.bakery.pj.model.BackeryVo;
+import com.bakery.pj.model.ContentVo;
 import com.bakery.pj.model.ImageFile;
 import com.bakery.pj.service.BackeryService;
 
@@ -36,25 +37,32 @@ public class BackeryController {
 										,@RequestParam(required = false, defaultValue = "1") int range
 										, @RequestParam(required = false) String keyword){
 	
-			Search search = new Search();
-
-			search.setKeyword(keyword);
-
-
-			int listCnt = backeryService.getBakeryListCnt();
-	
-			Pagination pagination = new Pagination();
-			pagination.pageInfo(page, range, listCnt);
-	
-	
-	
-			List<BackeryVo> backeryList = backeryService.listbackery(search);
 			try {
-				
+				Search search = new Search();
+
+				search.setKeyword(keyword);
+
+				int listCnt = backeryService.getBakeryListCnt();
+		
+				search.pageInfo(page, range, listCnt);
+				List<BackeryVo> backeryList = backeryService.listbackery(search);	
 				return new ResponseEntity<>(backeryList,HttpStatus.OK);
 			}catch(Exception e) {  
 				return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 			}
+	}
+	/*
+	 * 위치(지도)기반 빵집리스트 조회
+	 * */
+	@PostMapping("/bakerylocation") 
+	public ResponseEntity<?> maplistbackery(@RequestBody BackeryVo bakeryVo){
+		
+		try {
+			List<BackeryVo> backeryList = backeryService.maplistbackery(bakeryVo);		
+			return new ResponseEntity<>(backeryList,HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
 	}
 	/*
 	 * 빵집디테일
@@ -68,6 +76,28 @@ public class BackeryController {
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
+	}
+	@PostMapping("/bakery/writeContent")
+	public ResponseEntity<?> writeContentlBackery(@RequestParam("content") ContentVo contentVo
+												 ,@RequestParam("photo") MultipartFile file){
+		
+		try {
+
+			return new ResponseEntity<>("성공했습니",HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	}
+	@PostMapping("/bakery/imageupload")
+	public ResponseEntity<?> writeContentlBackery(@RequestParam("photo") MultipartFile file){
+
+			System.out.println(file.getName()+file.getOriginalFilename()+','+file.getSize());
+			try {
+			
+			return new ResponseEntity<>("성공",HttpStatus.OK);
+			}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+			}
 	}
 	@PostMapping(value = "/bakery/upload")
     public Map<String, Object> upload(@RequestParam("file") ImageFile multipartFile) throws IOException {

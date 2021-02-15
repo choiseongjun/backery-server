@@ -17,8 +17,12 @@ public class UserService {
 		return newUser;
 	}
 
-	public UserDao selectUserEmail(String username) {
+	public UserDao selectUserId(String username) {
 		System.out.println(username);
 		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.selectUser",username);
+	}
+
+	public int selectByUserId(String userId) {
+		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.countuserId",userId);
 	}
 }

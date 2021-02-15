@@ -9,5 +9,18 @@ mybatis:
   
 jwt:
   signingKey: 123456789 
-  expirationDateInMs : 400000
-  refreshExpirationDateInMs: 9000000
+  expirationDateInMs : 40000000
+  refreshExpirationDateInMs: 900000000
+  secret : "bakery"
+  
+cloud:
+  aws:
+    s3:
+      bucket: bakeryimage
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: 
+      secretKey: 
