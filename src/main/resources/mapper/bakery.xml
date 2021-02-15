@@ -27,6 +27,29 @@
 			</trim>
 		 LIMIT #{startList}, #{listSize}
 	</select>
+	<select id="selectBackery2" resultType="com.bakery.pj.model.BackeryVo2">
+		select
+		entrp_nm as entrpNm
+		, id as id
+		from breadstore
+		limit 4732, 5000
+
+
+	</select>
+	<update id="updateBakery" parameterType="com.bakery.pj.model.BackeryVo2">
+		update
+			breadstore
+		set
+			naver_place_url = #{naverPlaceUrl}
+			, business_hours = #{businessHours}
+		where id=#{id}
+	</update>
+	<insert id="insertBakeryMenu" parameterType="com.bakery.pj.model.BackeryVo2">
+		insert into breadstoremenu (id, menu_nm, menu_price)
+		value (#{id}, #{menuNm}, #{menuPrice})
+
+	</insert>
+
 	<select id="selectOneBackery" resultType="com.bakery.pj.model.BackeryVo">
 		select 
 			 entrp_nm as entrpNm  
