@@ -59,7 +59,7 @@ public class ContentsController {
 	 * */
 	@GetMapping("/contentDetail") 
 	public ResponseEntity<?> contentDetail(){
-		List<ContentVo> content = contentsService.contentsDetail();		
+		ContentVo content = contentsService.contentsDetail();		
 		try {
 			
 			return new ResponseEntity<>(content,HttpStatus.OK);

@@ -54,8 +54,8 @@ public class ContentsService {
 		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentList");
 	}
 
-	public List<ContentVo> contentsDetail() {
-		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentDetail");
+	public ContentVo contentsDetail() {
+		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.selectContentDetail");
 	}
 
 }
