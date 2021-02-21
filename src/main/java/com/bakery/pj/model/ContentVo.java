@@ -11,16 +11,22 @@ public class ContentVo {
 
 	private long id;
 	
-	private String userId;
+	private long userKey;
 	
 	private String title;
 	
 	private String content;
 	
-	private String[] imageId;
+	private long imageId;
 	
-	private String category;
+	private long categoryKey;
 	
 	private String url;
+	
+	private String nickname;//유저 닉네임
+	
+	private String create_date;
+	
+	private String update_date;
 	
 }

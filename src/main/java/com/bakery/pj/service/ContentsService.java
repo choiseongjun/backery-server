@@ -38,24 +38,27 @@ public class ContentsService {
 	public void insertContent(ContentVo contentVo) {
 		
 		Map<String, Long> map = new HashMap<String, Long>();
-		String[] ImageArr = contentVo.getImageId();
 		sqlSession.insert("com.bakery.pj.mapper.ContentMapper.saveContents", contentVo);
-		for(int i=0;i<contentVo.getImageId().length;i++) {
-			long imageId =Integer.parseInt(ImageArr[i]);
-			map.put("imageId",imageId);
-			map.put("content_id",contentVo.getId());
-			sqlSession.update("com.bakery.pj.mapper.ContentMapper.updateContentsImage", map);
-		}
+		
+		long imageId =contentVo.getImageId();
+		System.out.println("contentVo.getId()@#!@#!@#"+contentVo.getId());
+		map.put("imageId",imageId);
+		map.put("content_id",contentVo.getId());
+		sqlSession.update("com.bakery.pj.mapper.ContentMapper.updateContentsImage", map);
 		
 		
 	}
 
-	public List<ContentVo> contentsList() {
-		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentList");
+	public List<ContentVo> contentsList(long id) {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentList",id);
 	}
 
-	public ContentVo contentsDetail() {
-		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.selectContentDetail");
+	public ContentVo contentsDetail(long id) {
+		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.selectContentDetail",id);
+	}
+
+	public List<ContentVo> contentDetailNextPrev(long id) {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentPrevNext",id);
 	}
 
 }

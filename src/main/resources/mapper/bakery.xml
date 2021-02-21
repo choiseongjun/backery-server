@@ -3,7 +3,7 @@
 
 <mapper namespace="com.bakery.pj.mapper.BakeryMapper">
 	
-	<select id="selectBackery" parameterType="com.bakery.pj.model.BackeryVo" resultType="com.bakery.pj.model.BackeryVo"> 
+	<select id="selectBackery" parameterType="com.bakery.pj.common.Search" resultType="com.bakery.pj.model.BackeryVo"> 
 		select 
 			 entrp_nm as entrpNm
 		    ,load_addr as loadAddr
@@ -20,6 +20,7 @@
 		    ,id as id
 		    ,image as image
 		 from breadstore
+		 where xpos_lo like CONCAT(#{xposIo}, '%')   and ypos_la like CONCAT(#{yposIa}, '%')
 		 	<trim prefix="WHERE" prefixOverrides="AND|OR">
 				<if test="keyword != null and keyword != '' ">
 					AND entrp_nm like CONCAT('%', #{keyword}, '%')

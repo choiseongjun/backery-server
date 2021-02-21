@@ -35,12 +35,17 @@ public class BackeryController {
 	@GetMapping("/bakery") 
 	public ResponseEntity<?> listbackery(@RequestParam(required = false, defaultValue = "1") int page
 										,@RequestParam(required = false, defaultValue = "1") int range
-										, @RequestParam(required = false) String keyword){
+										, @RequestParam(required = false) String keyword
+										, @RequestParam(required = false) double xpos
+										, @RequestParam(required = false) double ypos){
 	
+		System.out.println("xpos==="+xpos+"ypos==="+ypos);
 			try {
 				Search search = new Search();
 
 				search.setKeyword(keyword);
+				search.setXposIo(xpos);
+				search.setYposIa(ypos);
 
 				int listCnt = backeryService.getBakeryListCnt();
 		
