@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bakery.pj.common.Search;
 import com.bakery.pj.model.BackeryVo;
 import com.bakery.pj.model.BackeryVo2;
+import com.bakery.pj.model.BakeryReview;
 
 @Service
 public class BackeryService {
@@ -42,6 +43,23 @@ public class BackeryService {
 
 	public List<BackeryVo> maplistbackery(BackeryVo bakeryVo) {
 		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectMapListBackery",bakeryVo);
+	}
+
+	public List<BackeryVo> detailBakeryMenu(long id) {
+		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectOneBackeryMenu",id);
+	}
+
+	public int writeReview(BakeryReview bakeryReview) {
+		return sqlSession.insert("com.bakery.pj.mapper.BakeryMapper.insertBakeryReview", bakeryReview);
+	}
+
+	public List<BakeryReview> selectReviewlBackery(long id) {
+		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectReviewlBackery",id);
+	}
+
+	public int deleteReviewlBackery(long id) {
+		return sqlSession.update("com.bakery.pj.mapper.BakeryMapper.deleteBakeryReview",id);
+		
 	}
 
 }

@@ -4,26 +4,27 @@
 <mapper namespace="com.bakery.pj.mapper.BakeryMapper">
 	
 	<select id="selectBackery" parameterType="com.bakery.pj.common.Search" resultType="com.bakery.pj.model.BackeryVo"> 
-		select 
-			 entrp_nm as entrpNm
-		    ,load_addr as loadAddr
-		    ,city_do_cd as cityDoCd
-		    ,city_gn_gu_cd as cityGuguCd
-		    ,xpos_lo as xposIo
-		    ,ypos_la as yposIa
-		    ,area_nm as areaNm
-		    ,homepage_url as homepageUrl
-		    ,tel_no as telNo
-		    ,reprsnt_menu_nm as reprsntMenuNm
-		    ,menu_pc as menuPc
-		    ,base_ymd as baseYmd
-		    ,id as id
-		    ,image as image
-		 from breadstore
-		 where xpos_lo like CONCAT(#{xposIo}, '%')   and ypos_la like CONCAT(#{yposIa}, '%')
+	select 
+			 a.entrp_nm as entrpNm
+		    ,a.load_addr as loadAddr
+		    ,a.city_do_cd as cityDoCd
+		    ,a.city_gn_gu_cd as cityGuguCd
+		    ,a.xpos_lo as xposIo
+		    ,a.ypos_la as yposIa
+		    ,a.area_nm as areaNm
+		    ,a.homepage_url as homepageUrl
+		    ,a.tel_no as telNo
+		    ,a.reprsnt_menu_nm as reprsntMenuNm
+		    ,a.menu_pc as menuPc
+		    ,a.base_ymd as baseYmd
+		    ,a.id as id
+		    ,a.image as image
+            ,(select count(*) from breadstorereview b where b.bread_store_key = a.id and b.delete_yn='N') as reviewCnt
+		 from breadstore a
+		 where a.xpos_lo like CONCAT(#{xposIo}, '%')   and a.ypos_la like CONCAT(#{yposIa}, '%')
 		 	<trim prefix="WHERE" prefixOverrides="AND|OR">
 				<if test="keyword != null and keyword != '' ">
-					AND entrp_nm like CONCAT('%', #{keyword}, '%')
+					AND a.entrp_nm like CONCAT('%', #{keyword}, '%')
 				</if>
 			</trim>
 		 LIMIT #{startList}, #{listSize}
@@ -56,22 +57,32 @@
 	<select id="selectOneBackery" parameterType="long" resultType="com.bakery.pj.model.BackeryVo">
 
 		select 
-			 entrp_nm as entrpNm  
-		    ,load_addr as loadAddr
-		    ,city_do_cd as cityDoCd
-		    ,city_gn_gu_cd as cityGuguCd
-		    ,xpos_lo as xposIo
-		    ,ypos_la as yposIa
-		    ,area_nm as areaNm
-		    ,homepage_url as homepageUrl
-		    ,tel_no as telNo
-		    ,reprsnt_menu_nm as reprsntMenuNm
-		    ,menu_pc as menuPc
-		    ,base_ymd as baseYmd
-		    ,id as id
-		    ,image as image
-		 from breadstore
-		 where id=#{id}
+			a.entrp_nm as entrpNm
+		    ,a.load_addr as loadAddr
+		    ,a.city_do_cd as cityDoCd
+		    ,a.city_gn_gu_cd as cityGuguCd
+		    ,a.xpos_lo as xposIo
+		    ,a.ypos_la as yposIa
+		    ,a.area_nm as areaNm
+		    ,a.homepage_url as homepageUrl
+		    ,a.tel_no as telNo
+		    ,a.reprsnt_menu_nm as reprsntMenuNm
+		    ,a.menu_pc as menuPc
+		    ,a.base_ymd as baseYmd
+		    ,a.id as id
+            ,a.business_hours as businessHours
+		    ,a.image as image
+		 from breadstore a
+		 where a.id=#{id}
+	</select>
+	<select id="selectOneBackeryMenu" parameterType="long" resultType="com.bakery.pj.model.BackeryVo">
+		 select 
+            b.menu_nm as menuNm
+            ,b.menu_price as menuPrice
+		 from breadstore a
+		 right outer join breadstoremenu b
+		 on a.id=b.id
+		 where a.id=#{id}
 	</select>
 	<select id="selectBakeryListCnt" resultType="int">
 		select
@@ -81,22 +92,51 @@
 
 	</select>
 	<select id="selectMapListBackery" resultType="com.bakery.pj.model.BackeryVo">
-	select 
-	 		entrp_nm as entrpNm
-		    ,load_addr as loadAddr
-		    ,city_do_cd as cityDoCd
-		    ,city_gn_gu_cd as cityGuguCd
-		    ,xpos_lo as xposIo
-		    ,ypos_la as yposIa
-		    ,area_nm as areaNm
-		    ,homepage_url as homepageUrl
-		    ,tel_no as telNo
-		    ,reprsnt_menu_nm as reprsntMenuNm
-		    ,menu_pc as menuPc
-		    ,base_ymd as baseYmd
-		    ,id as id
-		    ,image as image
-	 from breadstore
-	where xpos_lo like CONCAT(#{xposIo}, '%')   and ypos_la like CONCAT(#{yposIa}, '%')
+		select 
+		 		entrp_nm as entrpNm
+			    ,load_addr as loadAddr
+			    ,city_do_cd as cityDoCd
+			    ,city_gn_gu_cd as cityGuguCd
+			    ,xpos_lo as xposIo
+			    ,ypos_la as yposIa
+			    ,area_nm as areaNm
+			    ,homepage_url as homepageUrl
+			    ,tel_no as telNo
+			    ,reprsnt_menu_nm as reprsntMenuNm
+			    ,menu_pc as menuPc
+			    ,base_ymd as baseYmd
+			    ,id as id
+			    ,image as image
+		 from breadstore
+		where xpos_lo like CONCAT(#{xposIo}, '%')   and ypos_la like CONCAT(#{yposIa}, '%')
 	</select>
+	<select id="selectReviewlBackery" parameterType="long" resultType="com.bakery.pj.model.BakeryReview">
+		select 
+			 a.id
+		    ,a.content
+		    ,a.star
+		    ,a.create_date
+		    ,b.nickname
+		    ,b.id as userKey
+		from 
+		breadstorereview a
+		inner join user b
+		on a.user_key=b.id
+		where a.bread_store_key = #{id} and a.delete_yn='N'
+		order by a.id desc
+	</select>
+	<insert id="insertBakeryReview" parameterType="com.bakery.pj.model.BakeryReview" >
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE">
+           SELECT IFNULL(MAX(id),0)+1 FROM breadstorereview
+        </selectKey>
+		insert into breadstorereview (id,bread_store_key, content, star,user_key,create_date,update_date,delete_yn)
+		value (#{id},#{breadStoreKey}, #{content}, #{star},#{userKey},DATE_ADD(NOW(), INTERVAL 9 HOUR),DATE_ADD(NOW(), INTERVAL 9 HOUR),'N')
+	</insert>
+	<update id="deleteBakeryReview" parameterType="long">
+		update 
+			breadstorereview 
+		set 
+			delete_yn ='Y' 
+			where id=#{id}	
+	</update>
 </mapper>

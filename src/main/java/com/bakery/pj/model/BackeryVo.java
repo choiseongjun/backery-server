@@ -34,5 +34,13 @@ public class BackeryVo {
 	
 	private double yposIa;
 	
+	private String businessHours;
+	
+	private String menuNm;
+	
+	private String menuPrice;
+	
+	private long reviewCnt;
+	
 	
 }
