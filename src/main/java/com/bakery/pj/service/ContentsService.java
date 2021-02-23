@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bakery.pj.model.BackeryVo;
 import com.bakery.pj.model.ContentImageVo;
+import com.bakery.pj.model.ContentReplyVo;
 import com.bakery.pj.model.ContentVo;
 
 @Service
@@ -59,6 +60,14 @@ public class ContentsService {
 
 	public List<ContentVo> contentDetailNextPrev(long id) {
 		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentPrevNext",id);
+	}
+
+	public void insertContentReply(ContentReplyVo contentReplyVo) {
+		sqlSession.insert("com.bakery.pj.mapper.ContentMapper.saveContentsReply", contentReplyVo);
+	}
+
+	public List<ContentReplyVo> selectContentReply(long id) {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentsReply",id);
 	}
 
 }
