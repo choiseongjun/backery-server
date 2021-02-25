@@ -3,10 +3,11 @@
 
 <mapper namespace="com.bakery.pj.mapper.BakeryMapper">
 	
-	<select id="selectBackery" parameterType="com.bakery.pj.common.Search" resultType="com.bakery.pj.model.BackeryVo"> 
+	<select id="selectBackery" parameterType="com.bakery.pj.common.Search" resultType="com.bakery.pj.model.BakeryVo"> 
 	select 
 			 a.entrp_nm as entrpNm
 		    ,a.load_addr as loadAddr
+		    ,a.business_hours as businessHours
 		    ,a.city_do_cd as cityDoCd
 		    ,a.city_gn_gu_cd as cityGuguCd
 		    ,a.xpos_lo as xposIo
@@ -54,7 +55,7 @@
 	</insert>
 
 
-	<select id="selectOneBackery" parameterType="long" resultType="com.bakery.pj.model.BackeryVo">
+	<select id="selectOneBackery" parameterType="long" resultType="com.bakery.pj.model.BakeryVo">
 
 		select 
 			a.entrp_nm as entrpNm
@@ -75,7 +76,7 @@
 		 from breadstore a
 		 where a.id=#{id}
 	</select>
-	<select id="selectOneBackeryMenu" parameterType="long" resultType="com.bakery.pj.model.BackeryVo">
+	<select id="selectOneBackeryMenu" parameterType="long" resultType="com.bakery.pj.model.BakeryVo">
 		 select 
             b.menu_nm as menuNm
             ,b.menu_price as menuPrice
@@ -91,7 +92,7 @@
 			breadstore
 
 	</select>
-	<select id="selectMapListBackery" resultType="com.bakery.pj.model.BackeryVo">
+	<select id="selectMapListBackery" resultType="com.bakery.pj.model.BakeryVo">
 		select 
 		 		entrp_nm as entrpNm
 			    ,load_addr as loadAddr
@@ -139,4 +140,19 @@
 			delete_yn ='Y' 
 			where id=#{id}	
 	</update>
+	<select id="selectBakeryBlogList" parameterType="java.lang.Long" resultType="com.bakery.pj.model.ContentVo">
+		select 
+			a.id,
+		    a.user_key,
+		    a.title,
+		    a.category_key,
+		    b.id,
+		    b.url
+		from
+			contents a left outer join contents_img b
+		    on a.id=b.content_id
+    		where a.category_key=1 and bakery_key=#{id}
+	    group by a.id
+		order by a.id desc
+	</select>
 </mapper>

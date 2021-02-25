@@ -1,6 +1,6 @@
 package com.bakery.pj.controller;
 
-import com.bakery.pj.model.BackeryVo;
+import com.bakery.pj.model.BakeryVo;
 import com.bakery.pj.model.BackeryVo2;
 import com.bakery.pj.service.BackeryService;
 import lombok.AllArgsConstructor;

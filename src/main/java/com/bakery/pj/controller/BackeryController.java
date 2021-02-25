@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bakery.pj.common.Search;
-import com.bakery.pj.model.BackeryVo;
+import com.bakery.pj.model.BakeryVo;
+import com.bakery.pj.model.ContentVo;
 import com.bakery.pj.model.BakeryReview;
 import com.bakery.pj.model.ImageFile;
 import com.bakery.pj.model.user.UserDao;
 import com.bakery.pj.service.BackeryService;
+import com.bakery.pj.service.ContentsService;
 import com.bakery.pj.service.UserService;
 
 
@@ -35,6 +38,8 @@ public class BackeryController {
 	BackeryService backeryService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	ContentsService contentsService;
 	/*
 	 * 빵집리스트
 	 * */
@@ -55,7 +60,7 @@ public class BackeryController {
 				int listCnt = backeryService.getBakeryListCnt();
 		
 				search.pageInfo(page, range, listCnt);
-				List<BackeryVo> backeryList = backeryService.listbackery(search);	
+				List<BakeryVo> backeryList = backeryService.listbackery(search);	
 				return new ResponseEntity<>(backeryList,HttpStatus.OK);
 			}catch(Exception e) {  
 				return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -65,10 +70,10 @@ public class BackeryController {
 	 * 위치(지도)기반 빵집리스트 조회
 	 * */
 	@PostMapping("/bakerylocation") 
-	public ResponseEntity<?> maplistbackery(@RequestBody BackeryVo bakeryVo){
+	public ResponseEntity<?> maplistbackery(@RequestBody BakeryVo bakeryVo){
 		
 		try {
-			List<BackeryVo> backeryList = backeryService.maplistbackery(bakeryVo);		
+			List<BakeryVo> backeryList = backeryService.maplistbackery(bakeryVo);		
 			return new ResponseEntity<>(backeryList,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -81,7 +86,7 @@ public class BackeryController {
 	public ResponseEntity<?> detailBackery(@PathVariable long id){
 		
 		try {
-			BackeryVo bakeryDetail = backeryService.detailBakery(id);	
+			BakeryVo bakeryDetail = backeryService.detailBakery(id);	
 			return new ResponseEntity<>(bakeryDetail,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
@@ -92,7 +97,7 @@ public class BackeryController {
 	 * */
 	@GetMapping("/bakery/menu/{id}") 
 	public ResponseEntity<?> detailBackeryMenu(@PathVariable long id){
-		List<BackeryVo> bakeryDetailMenu = backeryService.detailBakeryMenu(id);
+		List<BakeryVo> bakeryDetailMenu = backeryService.detailBakeryMenu(id);
 		try {
 			
 			return new ResponseEntity<>(bakeryDetailMenu,HttpStatus.OK);
@@ -130,21 +135,41 @@ public class BackeryController {
 	 * 빵집디테일 리뷰 글쓰기
 	 * */
 	@PostMapping("/bakery/review/{id}")
+	@Transactional
 	public ResponseEntity<?> writeReviewlBackery(@RequestBody BakeryReview bakeryReview
 												 ,@PathVariable long id
 												 ,Principal principal){
 		
 	
-		
+	
 		try {
 			UserDao user = userService.selectUserId(principal.getName());
 			bakeryReview.setUserKey(user.getId());
 			bakeryReview.setBreadStoreKey(id);
-			backeryService.writeReview(bakeryReview);
+			
+			backeryService.writeReview(bakeryReview);	
+			System.out.println("bakeryReview.getId()"+bakeryReview.getId());
+			for(int i=0;i<bakeryReview.getImgId().length;i++) {
+				contentsService.updateBakeryReview(bakeryReview.getImgId()[i],bakeryReview.getId());
+			}
 			return new ResponseEntity<>(bakeryReview,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
+	}
+	/*
+	 * 빵집디테일 리뷰 조회
+	 * */
+	@GetMapping("/bakery/blogList/{id}") 
+	public ResponseEntity<?> detailBakeryBlogList(@PathVariable long id){
+		
+		try {
+			List<ContentVo> detailBakeryBlogList = backeryService.detailBakeryBlogList(id);	
+			return new ResponseEntity<>(detailBakeryBlogList,HttpStatus.OK);
+		}catch(Exception e) {
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+	
 	}
 	@PostMapping("/bakery/imageupload")
 	public ResponseEntity<?> writeContentlBackery(@RequestParam("photo") MultipartFile file){

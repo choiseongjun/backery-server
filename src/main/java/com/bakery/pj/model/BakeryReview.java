@@ -25,4 +25,7 @@ public class BakeryReview {
 	
 	private String nickname;
 	
+	private String[] imgId;
+	
+	
 }

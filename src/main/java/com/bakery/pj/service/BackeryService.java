@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bakery.pj.common.Search;
-import com.bakery.pj.model.BackeryVo;
+import com.bakery.pj.model.BakeryVo;
+import com.bakery.pj.model.ContentVo;
 import com.bakery.pj.model.BackeryVo2;
 import com.bakery.pj.model.BakeryReview;
 
@@ -17,7 +18,7 @@ public class BackeryService {
 	@Autowired
 	SqlSessionTemplate sqlSession;
 	
-	public List<BackeryVo> listbackery(Search search) {
+	public List<BakeryVo> listbackery(Search search) {
 		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectBackery",search);
 	}
 
@@ -25,7 +26,7 @@ public class BackeryService {
 		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectBackery2");
 	}
 
-	public BackeryVo detailBakery(long id) {
+	public BakeryVo detailBakery(long id) {
 		return sqlSession.selectOne("com.bakery.pj.mapper.BakeryMapper.selectOneBackery",id);
 	}
 
@@ -41,11 +42,11 @@ public class BackeryService {
 		return sqlSession.selectOne("com.bakery.pj.mapper.BakeryMapper.selectBakeryListCnt");
 	}
 
-	public List<BackeryVo> maplistbackery(BackeryVo bakeryVo) {
+	public List<BakeryVo> maplistbackery(BakeryVo bakeryVo) {
 		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectMapListBackery",bakeryVo);
 	}
 
-	public List<BackeryVo> detailBakeryMenu(long id) {
+	public List<BakeryVo> detailBakeryMenu(long id) {
 		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectOneBackeryMenu",id);
 	}
 
@@ -60,6 +61,10 @@ public class BackeryService {
 	public int deleteReviewlBackery(long id) {
 		return sqlSession.update("com.bakery.pj.mapper.BakeryMapper.deleteBakeryReview",id);
 		
+	}
+
+	public List<ContentVo> detailBakeryBlogList(long id) {
+		return sqlSession.selectList("com.bakery.pj.mapper.BakeryMapper.selectBakeryBlogList",id);
 	}
 
 }

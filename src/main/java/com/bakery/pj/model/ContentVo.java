@@ -29,4 +29,8 @@ public class ContentVo {
 	
 	private String update_date;
 	
+	private long commentCnt;
+	
+	private long bakeryKey;
+	
 }

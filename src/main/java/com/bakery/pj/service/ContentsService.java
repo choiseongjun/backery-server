@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bakery.pj.model.BackeryVo;
+import com.bakery.pj.model.BakeryVo;
 import com.bakery.pj.model.ContentImageVo;
 import com.bakery.pj.model.ContentReplyVo;
 import com.bakery.pj.model.ContentVo;
@@ -42,7 +42,6 @@ public class ContentsService {
 		sqlSession.insert("com.bakery.pj.mapper.ContentMapper.saveContents", contentVo);
 		
 		long imageId =contentVo.getImageId();
-		System.out.println("contentVo.getId()@#!@#!@#"+contentVo.getId());
 		map.put("imageId",imageId);
 		map.put("content_id",contentVo.getId());
 		sqlSession.update("com.bakery.pj.mapper.ContentMapper.updateContentsImage", map);
@@ -68,6 +67,26 @@ public class ContentsService {
 
 	public List<ContentReplyVo> selectContentReply(long id) {
 		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentsReply",id);
+	}
+
+	public void contentDetailReplyDelete(long id) {
+		sqlSession.update("com.bakery.pj.mapper.ContentMapper.deleteContentReply",id);		
+	}
+
+	public void contentDetailReplyUpdate(ContentReplyVo contentReplyVo) {
+		sqlSession.update("com.bakery.pj.mapper.ContentMapper.updateContentReply",contentReplyVo);				
+	}
+
+	public List<ContentVo> contentBakeryBlogListAll() {
+		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentBakeryBlogListAll");
+	}
+
+	public void updateBakeryReview(String id, long bakeryReviewId) {
+		Map<String, Long> map = new HashMap<String, Long>();
+		map.put("bakeryReviewId",bakeryReviewId);
+		map.put("id",Long.parseLong(id));
+		sqlSession.update("com.bakery.pj.mapper.ContentMapper.updateBakeryReviewImageId",map);
+		
 	}
 
 }
