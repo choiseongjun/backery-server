@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bakery.pj.model.BakeryVo;
 import com.bakery.pj.model.ContentImageVo;
+import com.bakery.pj.model.ContentLikeVo;
 import com.bakery.pj.model.ContentReplyVo;
 import com.bakery.pj.model.ContentVo;
 
@@ -53,6 +54,12 @@ public class ContentsService {
 		return sqlSession.selectList("com.bakery.pj.mapper.ContentMapper.selectContentList",id);
 	}
 
+	public ContentVo contentsDetailUser(long id, long userKey) {
+		Map<String, Long> map = new HashMap<String, Long>();
+		map.put("id",id);
+		map.put("userKey",userKey);
+		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.selectContentDetailUser",map);
+	}
 	public ContentVo contentsDetail(long id) {
 		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.selectContentDetail",id);
 	}
@@ -88,5 +95,18 @@ public class ContentsService {
 		sqlSession.update("com.bakery.pj.mapper.ContentMapper.updateBakeryReviewImageId",map);
 		
 	}
+
+	@Transactional
+	public long insertContentLike(ContentLikeVo contentLikeVo) {
+		sqlSession.insert("com.bakery.pj.mapper.ContentMapper.saveContentLike", contentLikeVo);
+		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.cntContentLike",contentLikeVo);		
+	}
+
+	public long deleteContentLike(ContentLikeVo contentLikeVo) {
+		sqlSession.delete("com.bakery.pj.mapper.ContentMapper.deleteContentLike", contentLikeVo);
+		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.cntContentLike",contentLikeVo);		
+	}
+
+	
 
 }

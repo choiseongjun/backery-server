@@ -31,6 +31,10 @@ public class ContentVo {
 	
 	private long commentCnt;
 	
+	private long commentLikeCnt;
+
+	private boolean commentLikeCheck;//유저가 좋아요했는지 안했는지 체크하기위함
+	
 	private long bakeryKey;
 	
 }

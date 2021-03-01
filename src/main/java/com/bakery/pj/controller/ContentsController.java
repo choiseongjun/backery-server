@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bakery.pj.model.ContentLikeVo;
 import com.bakery.pj.model.ContentReplyVo;
 import com.bakery.pj.model.ContentVo;
 import com.bakery.pj.model.user.UserDao;
@@ -143,14 +144,24 @@ public class ContentsController {
 	 * 컨텐츠 디테일 조회
 	 * */
 	@GetMapping("/contentDetail/{id}") 
-	public ResponseEntity<?> contentDetail(@PathVariable long id){
+	public ResponseEntity<?> contentDetail(@PathVariable long id,Principal principal){
 		
-		try {
-			ContentVo content = contentsService.contentsDetail(id);			
+		if(principal!=null) {
+			System.out.println("id 존재");
+			UserDao user = userService.selectUserId(principal.getName());
+			ContentVo content = contentsService.contentsDetailUser(id,user.getId());		
 			return new ResponseEntity<>(content,HttpStatus.OK);
-		}catch(Exception e) {  
-			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
-		}
+		}else {
+			System.out.println("id 존재 안함");
+			ContentVo content = contentsService.contentsDetail(id);		
+			return new ResponseEntity<>(content,HttpStatus.OK);
+		}	
+//		try {
+//				
+//			
+//		}catch(Exception e) {  
+//			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+//		}
 	}
 	
 	/*
@@ -166,4 +177,54 @@ public class ContentsController {
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 	}
+	/*
+	 * 컨텐츠 댓글 좋아요
+	 * */
+	@PostMapping("/contents/like/{id}")
+	@Transactional
+    public ResponseEntity<?> contentLike(@PathVariable long id
+    									,Principal principal) throws IOException {
+	 
+		
+		try {
+			
+			UserDao user = userService.selectUserId(principal.getName());
+			ContentLikeVo contentLikeVo = new ContentLikeVo();
+			contentLikeVo.setUserKey(user.getId());
+			contentLikeVo.setContentKey(id);
+			
+			long likeCnt =  contentsService.insertContentLike(contentLikeVo);	
+			contentLikeVo.setCnt(likeCnt);
+			contentLikeVo.setLikeCheck(true);	  
+			return new ResponseEntity<>(contentLikeVo,HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+
+    }
+	/*
+	 * 컨텐츠 댓글 좋아요 취소
+	 * */
+	@DeleteMapping("/contents/like/{id}")
+	@Transactional
+    public ResponseEntity<?> deleteContentLike(@PathVariable long id
+    									,Principal principal) throws IOException {
+	 
+		
+		try {
+			
+			UserDao user = userService.selectUserId(principal.getName());
+			ContentLikeVo contentLikeVo = new ContentLikeVo();
+			contentLikeVo.setUserKey(user.getId());
+			contentLikeVo.setContentKey(id);
+			
+			long likeCnt =  contentsService.deleteContentLike(contentLikeVo);	
+			contentLikeVo.setCnt(likeCnt);
+			contentLikeVo.setLikeCheck(false);	  
+			return new ResponseEntity<>(contentLikeVo,HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+
+    }
 }
