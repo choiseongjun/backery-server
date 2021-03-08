@@ -21,6 +21,12 @@
 		from user
 		where userid=#{userId}
 	</select>
+	<select id="countContents" parameterType="java.lang.Long" resultType="java.lang.Long">
+	select 
+		count(*)
+	 from contents
+	where user_key=#{id}
+	</select>
 	<select id="countuserId" resultType="int" parameterType="string">
 		select
 			count(userid)

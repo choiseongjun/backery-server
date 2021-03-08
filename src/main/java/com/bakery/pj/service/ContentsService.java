@@ -107,6 +107,11 @@ public class ContentsService {
 		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.cntContentLike",contentLikeVo);		
 	}
 
+
+	public ContentReplyVo selectContentReplyOne(ContentReplyVo contentReplyVo) {
+		return sqlSession.selectOne("com.bakery.pj.mapper.ContentMapper.selectContentReplyOne",contentReplyVo);
+	}
+
 	
 
 }

@@ -63,10 +63,11 @@ public class ContentsController {
 		contentReplyVo.setNickname(user.getNickname());
 		contentReplyVo.setContentsKey(id);
 		contentsService.insertContentReply(contentReplyVo);	
+		ContentReplyVo returnContentReplyVo = contentsService.selectContentReplyOne(contentReplyVo);
 		try {
 			
 			  
-			return new ResponseEntity<>(contentReplyVo,HttpStatus.OK);
+			return new ResponseEntity<>(returnContentReplyVo,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}

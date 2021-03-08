@@ -18,11 +18,14 @@ public class UserService {
 	}
 
 	public UserDao selectUserId(String username) {
-		System.out.println(username);
 		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.selectUser",username);
 	}
 
 	public int selectByUserId(String userId) {
 		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.countuserId",userId);
+	}
+
+	public long countContents(long id) {
+		return sqlSession.selectOne("com.bakery.pj.mapper.UserMapper.countContents",id);
 	}
 }

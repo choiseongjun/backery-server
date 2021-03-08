@@ -51,7 +51,7 @@ public class UserController {
 		
 		int userIdCnt = userService.selectByUserId(user.getUserId());
 		
-	  if(userIdCnt!=0) {
+		if(userIdCnt!=0) {
             return new ResponseEntity<String>("아이디가 이미 존재합니다!",
                     HttpStatus.BAD_REQUEST);
         }
@@ -72,7 +72,6 @@ public class UserController {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 		
-		System.out.println("authenticationRequest.getUserId()"+authenticationRequest.getUserId());
 		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserId());
 		String token = jwtUtil.generateToken(userDetails);
 		String resfreshToken = jwtUtil.generateRefreshToken(userDetails);
@@ -81,36 +80,38 @@ public class UserController {
 	}
 	@GetMapping("/user/userInfo")
 	public ResponseEntity<?> createAuthenticationToken(Principal principal){
-		System.out.println(principal.getName());
-		UserDao user =userService.selectUserId(principal.getName());
+		
 		try {
-			
+			UserDao user =userService.selectUserId(principal.getName());	
 			return new ResponseEntity<>(user,HttpStatus.OK);
 		}catch(Exception e) {  
 			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
 		}
 
 	}
-	
+	@GetMapping("/user/count/writeAll")
+	public ResponseEntity<?> countwriteAll(Principal principal){
+		
+		try {
+			UserDao user =userService.selectUserId(principal.getName());	
+			long cntWrite = userService.countContents(user.getId());	
+			return new ResponseEntity<>(cntWrite,HttpStatus.OK);
+		}catch(Exception e) {  
+			return new ResponseEntity<>("실패하였습니다.새로고침후 다시 시도해주세요",HttpStatus.BAD_REQUEST);	
+		}
+
+	}
 
 	@PostMapping("/photo")
     public String execWrite(@RequestParam("file") MultipartFile file) throws IOException {
 	  
-	  System.out.println("file"+file);
 	  s3Service.upload(file);
-        
-
-
-
-       
 
         return null;
     }
 	@GetMapping("/hellouser")
 	public String getUser(Principal principal)
 	{
-		System.out.println("1111");
-		System.out.println(principal.getName());
 		return "Hello User";
 	}
 	

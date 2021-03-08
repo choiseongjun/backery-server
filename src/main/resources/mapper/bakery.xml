@@ -73,6 +73,7 @@
 		    ,a.id as id
             ,a.business_hours as businessHours
 		    ,a.image as image
+		    ,(select count(*) from breadstorereview b where b.bread_store_key = a.id and b.delete_yn='N') as reviewCnt
 		 from breadstore a
 		 where a.id=#{id}
 	</select>
